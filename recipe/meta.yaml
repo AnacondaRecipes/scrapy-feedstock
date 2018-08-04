@@ -43,7 +43,6 @@ requirements:
     - parsel >=1.1.0
     - pydispatcher >=2.0.5
     - service_identity
-    - pywin32  # [win]
 
 test:
   imports:
