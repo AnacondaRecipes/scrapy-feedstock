@@ -3,21 +3,18 @@
 # https://github.com/scrapy/scrapy/wiki/Scrapy-release-procedure#conda-packages
 #
 {% set name = "Scrapy" %}
-{% set version = "1.5.2" %}
-{% set hash_type = "sha256" %}
-{% set hash_val = "005933cc426b8ff7eae84ef8b9370f6465f9e43c4daede68474711b5e21fe607" %}
+{% set version = "1.6.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  {{ hash_type }}: {{ hash_val }}
+  sha256: 558dfd10ac53cb324ecd7eefd3eac412161c7507c082b01b0bcd2c6e2e9f0766
 
 build:
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
   entry_points:
     - scrapy = scrapy.cmdline:execute
   number: 0
@@ -27,7 +24,7 @@ build:
 requirements:
   host:
     - python
-    - setuptools
+    - pip
 
   run:
     - python
