@@ -44,34 +44,6 @@ requirements:
 test:
   imports:
     - scrapy
-    - scrapy.commands
-    - scrapy.contracts
-    - scrapy.contrib
-    - scrapy.contrib.downloadermiddleware
-    - scrapy.exporters
-    - scrapy.linkextractors
-    - scrapy.loader
-    - scrapy.pipelines
-    - scrapy.contrib.spidermiddleware
-    - scrapy.contrib_exp
-    - scrapy.contrib_exp.downloadermiddleware
-    - scrapy.core
-    - scrapy.core.downloader
-    - scrapy.core.downloader.handlers
-    - scrapy.downloadermiddlewares
-    - scrapy.extensions
-    - scrapy.http
-    - scrapy.http.request
-    - scrapy.http.response
-    - scrapy.linkextractors
-    - scrapy.loader
-    - scrapy.pipelines
-    - scrapy.selector
-    - scrapy.settings
-    - scrapy.spidermiddlewares
-    - scrapy.spiders
-    - scrapy.utils
-    - scrapy.xlib
 
   commands:
     # Ideally, we will run tests here but we require to provide the tests
