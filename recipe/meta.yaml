@@ -33,6 +33,7 @@ requirements:
     - twisted >=16.4.0  # [win]
     - w3lib >=1.17.0
     - queuelib
+    - itemadapter
     - lxml
     - pyopenssl
     - cssselect >=0.9
