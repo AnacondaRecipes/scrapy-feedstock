@@ -51,8 +51,6 @@ requirements:
     - protego >=0.1.15
     - itemadapter >=0.1.0
     - h2 >=3.0, <4.0
-    - hpack
-    - hyperframe
 
 
 test:
