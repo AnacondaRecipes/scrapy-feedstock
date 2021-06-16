@@ -23,24 +23,34 @@ build:
 # version (check setup.py for changes).
 requirements:
   host:
-    - python
+    - python >=3.6
     - pip
+    - setuptools
+    - wheel
 
   run:
-    - python
+    - python >=3.6
     - setuptools
-    - twisted >=13.1.0  # [not win]
-    - twisted >=16.4.0  # [win]
-    - w3lib >=1.17.0
-    - queuelib
-    - itemadapter
-    - lxml
-    - pyopenssl
-    - cssselect >=0.9
-    - six >=1.5.2
-    - parsel >=1.5
+    - pywin32  # [win]
+
+    # Same order as setup.py:
+    - twisted >=17.9.0
+    - cryptography >=2.0
+    - cssselect >=0.9.1
+    - itemloaders >=1.0.1
+    - lxml >=3.5.0
+    - parsel >=1.5.0
     - pydispatcher >=2.0.5
-    - service_identity
+    - pyOpenSSL >=16.2.0
+    - queuelib >=1.4.2
+    - service_identity >=16.0.0
+    - w3lib >=1.17.0
+    - zope.interface >=4.1.3
+    - protego >=0.1.15
+    - itemadapter >=0.1.0
+    # deps of twisted[http2]
+    - h2 >=3.0, <4.0
+    - priority >=1.1.0, <2.0
 
 test:
   imports:
@@ -53,9 +63,10 @@ test:
 
 about:
   home: https://scrapy.org/
-  license: BSD 3-Clauses
+  license: BSD-3-Clauses
+  license_family: BSD
   license_file: LICENSE
-  summary: A high-level Python Screen Scraping framework
+  summary: A high-level Web Crawling and Web Scraping framework
   description: |
     Scrapy is an open source and collaborative framework for extracting the
     data you need from websites in a fast, simple, yet extensible way.
