@@ -17,8 +17,7 @@ build:
   number: 0
   # scrapy, pydispatcher >=2.0.5, queuelib, and parsel >=1.5 
   # currently aren't available on s390x
-  # It seems like scrapy 2.6.1 or its dependencies still do not support python 3.10
-  skip: True  # [s390x or py<36 or py>=310]
+  skip: True  # [s390x or py<36]
   script: {{ PYTHON }} -m pip install . --no-deps -vv
   entry_points:
     - scrapy = scrapy.cmdline:execute
@@ -52,8 +51,7 @@ requirements:
     # cpython depenencies
     - lxml >=3.5.0
     - pydispatcher >=2.0.5
-    # https://github.com/scrapy/scrapy/pull/5208
-    - libxml2 <2.9.11
+    - libxml2
 
 test:
   imports:
