@@ -3,7 +3,7 @@
 # https://github.com/scrapy/scrapy/wiki/Scrapy-release-procedure#conda-packages
 #
 {% set name = "Scrapy" %}
-{% set version = "2.6.1" %}
+{% set version = "2.6.2" %}
 
 package:
   name: {{ name|lower }}
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 56fd55a59d0f329ce752892358abee5a6b50b4fc55a40420ea317dc617553827
+  sha256: 55e21181165f25337105fff1efc8393296375cea7de699a7e703bbd265595f26
 
 build:
   number: 0
@@ -51,7 +51,10 @@ requirements:
     # cpython depenencies
     - lxml >=3.5.0
     - pydispatcher >=2.0.5
-    - libxml2
+    # See https://github.com/scrapy/scrapy/pull/5208 (on 16 Jul 2021). But after that date 
+    # lxml was fixed https://github.com/AnacondaRecipes/lxml-feedstock/commit/173869446fd13f3189291ba14af27958cd1bc1c6,
+    # exclusions due to https://bugs.launchpad.net/lxml/+bug/1928795
+    - libxml2 >=2.9.2,!=2.9.11,!=2.9.12
 
 test:
   imports:
