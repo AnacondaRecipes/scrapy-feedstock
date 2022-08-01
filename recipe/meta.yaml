@@ -70,7 +70,8 @@ test:
 
 about:
   home: https://scrapy.org/
-  license: BSD-3-Clause-Clear
+  license: BSD-3-Clause
+  license_family: BSD
   license_file: LICENSE
   summary: A high-level Python Screen Scraping framework
   description: |
