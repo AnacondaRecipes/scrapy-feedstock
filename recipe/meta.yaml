@@ -68,7 +68,8 @@ test:
     - scrapy version -v
     - scrapy bench
     - scrapy --help
-    - pytest -n auto
+    # FTP tests: connection refused on 127.0.0.1
+    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore)"
 
 about:
   home: https://scrapy.org/
