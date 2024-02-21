@@ -3,3 +3,5 @@ aggregate_branch: 3.12
 channels:
   - https://staging.continuum.io/prefect/fs/itemloaders-feedstock/pr2/400d546
   - https://staging.continuum.io/prefect/fs/w3lib-feedstock/pr1/22b14b0
+  - https://staging.continuum.io/prefect/fs/incremental-feedstock/pr2/7b49f23
+  - https://staging.continuum.io/prefect/fs/twisted-feedstock/pr8/cd19395
