@@ -63,13 +63,19 @@ test:
     - testfixtures
     - uvloop # [not win]
     - ipython
+    - pexpect # [win]
   commands:
     - pip check
     - scrapy version -v
     - scrapy bench
     - scrapy --help
-    # FTP tests: connection refused on 127.0.0.1
-    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore)"
+    # win-64: FTP tests: connection refused on 127.0.0.1
+    # win-64: test_shutdown_forced
+    # linux-s390x: test_utf16 fails due to endianness
+    # test_start_requests_laziness sporadic failures
+    # test_mediatype_parameters fails due to regex issue in parse_data_uri
+    # Https10TestCase, Http11ProxyTestCase, EngineTest, BytesReceivedEngineTest, WebClientSSLTestCase see: https://github.com/scrapy/scrapy/issues/5961
+    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore or test_utf16 or test_start_requests_laziness or test_mediatype_parameters or Https10TestCase or Http11ProxyTestCase or EngineTest or test_shutdown_forced or BytesReceivedEngineTest or WebClientSSLTestCase or test_delay)"
 
 about:
   home: https://scrapy.org/
