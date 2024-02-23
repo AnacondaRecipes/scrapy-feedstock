@@ -3,7 +3,7 @@
 # https://github.com/scrapy/scrapy/wiki/Scrapy-release-procedure#conda-packages
 #
 {% set name = "Scrapy" %}
-{% set version = "2.8.0" %}
+{% set version = "2.11.1" %}
 
 package:
   name: {{ name|lower }}
@@ -11,19 +11,15 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 8071ac6c65f185ec2c76fe8509f94d99fea080519fdc206f908a920d5e05fe43
+  sha256: 733a039c7423e52b69bf2810b5332093d4e42a848460359c07b02ecff8f73ebe
 
 build:
   number: 0
-  # scrapy, pydispatcher >=2.0.5, queuelib, and parsel >=1.5 
-  # currently aren't available on s390x
-  skip: True  # [s390x or py<37]
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  skip: True  # [py<38]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   entry_points:
     - scrapy = scrapy.cmdline:execute
 
-# The requirements below shall match the requirements from the target package
-# version (check setup.py for changes).
 requirements:
   host:
     - python
@@ -32,14 +28,12 @@ requirements:
     - wheel
   run:
     - python
-    - pywin32  # [win]
-    # Same order as setup.py:
     - twisted >=18.9.0
-    - cryptography >=3.4.6
+    - cryptography >=36.0.0
     - cssselect >=0.9.1
     - itemloaders >=1.0.1
     - parsel >=1.5.0
-    - pyOpenSSL >=21.0.0
+    - pyopenssl >=21.0.0
     - queuelib >=1.4.2
     - service_identity >=18.1.0
     - w3lib >=1.17.0
@@ -49,26 +43,39 @@ requirements:
     - setuptools
     - packaging
     - tldextract
-    # cpython depenencies
-    - lxml >=4.3.0
+    - lxml >=4.4.1
     - pydispatcher >=2.0.5
-    # See https://github.com/scrapy/scrapy/pull/5208 (on 16 Jul 2021). But after that date 
-    # lxml was fixed https://github.com/AnacondaRecipes/lxml-feedstock/commit/173869446fd13f3189291ba14af27958cd1bc1c6,
-    # exclusions due to https://bugs.launchpad.net/lxml/+bug/1928795
-    - libxml2 >=2.9.2,!=2.9.11,!=2.9.12
 
 test:
+  source_files:
+    - conftest.py
+    - pytest.ini
+    - tests
   imports:
     - scrapy
   requires:
     - pip
+    # Tests requirements
+    - attrs
+    - pytest
+    - pytest-cov
+    - pytest-xdist
+    - testfixtures
+    - uvloop # [not win]
+    - ipython
+    - pexpect # [win]
   commands:
-    # Ideally, we will run tests here but we require to provide the tests
-    # requirements first.
     - pip check
     - scrapy version -v
     - scrapy bench
     - scrapy --help
+    # win-64: FTP tests: connection refused on 127.0.0.1
+    # win-64: test_shutdown_forced
+    # linux-s390x: test_utf16 fails due to endianness
+    # test_start_requests_laziness sporadic failures
+    # test_mediatype_parameters fails due to regex issue in parse_data_uri
+    # Https10TestCase, Http11ProxyTestCase, EngineTest, BytesReceivedEngineTest, WebClientSSLTestCase see: https://github.com/scrapy/scrapy/issues/5961
+    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore or test_utf16 or test_start_requests_laziness or test_mediatype_parameters or Https10TestCase or Http11ProxyTestCase or EngineTest or test_shutdown_forced or BytesReceivedEngineTest or WebClientSSLTestCase or test_delay)"
 
 about:
   home: https://scrapy.org/
