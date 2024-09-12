@@ -2,8 +2,8 @@
 # See the guidelines for updating this recipe for new releases:
 # https://github.com/scrapy/scrapy/wiki/Scrapy-release-procedure#conda-packages
 #
-{% set name = "Scrapy" %}
-{% set version = "2.11.1" %}
+{% set name = "scrapy" %}
+{% set version = "2.11.2" %}
 
 package:
   name: {{ name|lower }}
