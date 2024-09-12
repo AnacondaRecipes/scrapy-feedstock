@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 733a039c7423e52b69bf2810b5332093d4e42a848460359c07b02ecff8f73ebe
+  sha256: dfbd565384fc3fffeba121f5a3a2d0899ac1f756d41432ca0879933fbfb3401d
 
 build:
   number: 0
@@ -45,6 +45,7 @@ requirements:
     - tldextract
     - lxml >=4.4.1
     - pydispatcher >=2.0.5
+    - defusedxml >=0.7.1
 
 test:
   source_files:
