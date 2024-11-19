@@ -58,6 +58,7 @@ test:
     - pip
     # Tests requirements
     - attrs
+    - pygments
     - pytest
     - pytest-cov
     - pytest-xdist
