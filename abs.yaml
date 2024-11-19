@@ -1,1 +1,2 @@
-aggregate_branch: 3.12
+channels:
+  - https://staging.continuum.io/prefect/fs/lxml-feedstock/pr14/c54098b
