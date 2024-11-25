@@ -1,4 +1,0 @@
-channels:
-  - https://staging.continuum.io/prefect/fs/sybil-feedstock/pr1/e9f6c0d
-  - https://staging.continuum.io/prefect/fs/libxml2-feedstock/pr18/330077e
-  - https://staging.continuum.io/prefect/fs/lxml-feedstock/pr15/78146f2
