@@ -1,8 +1,2 @@
 build_env_vars:
   ANACONDA_ROCKET_ENABLE_PY313 : yes
-
-channels:
-  - https://staging.continuum.io/prefect/fs/twisted-feedstock/pr9/31d7af9
-  - https://staging.continuum.io/prefect/fs/incremental-feedstock/pr3/df9cf5a
-  - https://staging.continuum.io/prefect/fs/automat-feedstock/pr1/99b3b19
-  - https://staging.continuum.io/prefect/fs/itemloaders-feedstock/pr3/96b163a
