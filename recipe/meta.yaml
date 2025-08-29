@@ -1,9 +1,5 @@
-#
-# See the guidelines for updating this recipe for new releases:
-# https://github.com/scrapy/scrapy/wiki/Scrapy-release-procedure#conda-packages
-#
 {% set name = "scrapy" %}
-{% set version = "2.12.0" %}
+{% set version = "2.13.3" %}
 
 package:
   name: {{ name|lower }}
@@ -11,40 +7,39 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: d66d6e76009b12447604196875a463b61d10721140032a8084a0a52df7f4788f
+  sha256: bf17588c10e46a9d70c49a05380b749e3c7fba58204a367a5747ce6da2bd204d
 
 build:
-  number: 1
-  skip: True  # [py<39]
+  number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   entry_points:
     - scrapy = scrapy.cmdline:execute
+  skip: True  # [py<39]
 
 requirements:
   host:
     - python
     - pip
-    - setuptools
-    - wheel
+    - hatchling >=1.27.0
   run:
     - python
     - twisted >=21.7.0
     - cryptography >=37.0.0
     - cssselect >=0.9.1
+    - defusedxml >=0.7.1
+    - itemadapter >=0.1.0
     - itemloaders >=1.0.1
+    - lxml >=4.6.0
+    - packaging
     - parsel >=1.5.0
+    - protego >=0.1.15
     - pyopenssl >=22.0.0
     - queuelib >=1.4.2
     - service_identity >=18.1.0
+    - tldextract
     - w3lib >=1.17.0
     - zope.interface >=5.1.0
-    - protego >=0.1.15
-    - itemadapter >=0.1.0
-    - packaging
-    - tldextract
-    - lxml >=4.6.0
     - pydispatcher >=2.0.5
-    - defusedxml >=0.7.1
 
 test:
   source_files:
@@ -55,13 +50,12 @@ test:
     - scrapy
   requires:
     - pip
-    # Tests requirements
     - attrs
     - pygments
     - pytest
     - pytest-cov
     - pytest-xdist
-    - sybil >= 1.3.0  # https://github.com/cjw296/sybil/issues/20#issuecomment-605433422
+    - sybil >=1.3.0  # https://github.com/cjw296/sybil/issues/20#issuecomment-605433422
     - testfixtures
     - uvloop # [not win]
     - ipython
@@ -73,15 +67,14 @@ test:
     - scrapy --help
     # win-64: FTP tests: connection refused on 127.0.0.1
     # win-64: test_shutdown_forced
-    # linux-s390x: test_utf16 fails due to endianness
     # test_start_requests_laziness sporadic failures
     # test_mediatype_parameters fails due to regex issue in parse_data_uri
     # Https10TestCase, Http11ProxyTestCase, EngineTest, BytesReceivedEngineTest, WebClientSSLTestCase see: https://github.com/scrapy/scrapy/issues/5961
     - set "PYTHONIOENCODING=utf8"  # [win]
-    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore or test_utf16 or test_start_requests_laziness or test_mediatype_parameters or Https10TestCase or Http11ProxyTestCase or EngineTest or test_shutdown_forced or BytesReceivedEngineTest or WebClientSSLTestCase or test_delay)"
+    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore or test_start_requests_laziness or test_mediatype_parameters or Https10TestCase or Http11ProxyTestCase or EngineTest or test_shutdown_forced or BytesReceivedEngineTest or WebClientSSLTestCase or test_delay)"
 
 about:
-  home: https://scrapy.org/
+  home: https://scrapy.org
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
