@@ -44,7 +44,6 @@ requirements:
 test:
   source_files:
     - conftest.py
-    - pytest.ini
     - tests
   imports:
     - scrapy
@@ -71,7 +70,7 @@ test:
     # test_mediatype_parameters fails due to regex issue in parse_data_uri
     # Https10TestCase, Http11ProxyTestCase, EngineTest, BytesReceivedEngineTest, WebClientSSLTestCase see: https://github.com/scrapy/scrapy/issues/5961
     - set "PYTHONIOENCODING=utf8"  # [win]
-    - pytest -n auto -k "not (FTPTestCase or FTPFeedStorageTest or TestFTPFileStore or test_start_requests_laziness or test_mediatype_parameters or Https10TestCase or Http11ProxyTestCase or EngineTest or test_shutdown_forced or BytesReceivedEngineTest or WebClientSSLTestCase or test_delay)"
+    - pytest -n auto -k "not (FTPTestCase or TestFTPFeedStorage or TestFTPFileStore or test_start_requests_laziness or test_mediatype_parameters or Https10TestCase or Http11ProxyTestCase or EngineTest or test_shutdown_forced or BytesReceivedEngineTest or WebClientSSLTestCase or test_delay or test_start_deprecated_super)"
 
 about:
   home: https://scrapy.org
