@@ -1,13 +1,13 @@
 {% set name = "scrapy" %}
-{% set version = "2.13.3" %}
+{% set version = "2.13.4" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: bf17588c10e46a9d70c49a05380b749e3c7fba58204a367a5747ce6da2bd204d
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: e09bce40c56b56f9f86b0d078a0e5cdd08283c83076170ce7a8eec7189ac2493
 
 build:
   number: 0
@@ -23,7 +23,8 @@ requirements:
     - hatchling >=1.27.0
   run:
     - python
-    - twisted >=21.7.0
+    # Twisted pinned until Scrapy is updated for its internal TLS API changes
+    - twisted >=21.7.0,<=25.5.0
     - cryptography >=37.0.0
     - cssselect >=0.9.1
     - defusedxml >=0.7.1
@@ -39,7 +40,8 @@ requirements:
     - tldextract
     - w3lib >=1.17.0
     - zope.interface >=5.1.0
-    - pydispatcher >=2.0.5
+    - pydispatcher >=2.0.5  # [python_impl == 'cpython']
+    - pydispatcher >=2.1.0  # [python_impl == 'pypy']
 
 test:
   source_files:
