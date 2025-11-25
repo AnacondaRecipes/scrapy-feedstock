@@ -1,20 +1,20 @@
 {% set name = "scrapy" %}
-{% set version = "2.13.3" %}
+{% set version = "2.13.4" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: bf17588c10e46a9d70c49a05380b749e3c7fba58204a367a5747ce6da2bd204d
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: e09bce40c56b56f9f86b0d078a0e5cdd08283c83076170ce7a8eec7189ac2493
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   entry_points:
     - scrapy = scrapy.cmdline:execute
-  skip: True  # [py<39]
+  skip: true  # [py<39]
 
 requirements:
   host:
@@ -23,7 +23,7 @@ requirements:
     - hatchling >=1.27.0
   run:
     - python
-    - twisted >=21.7.0
+    - twisted >=21.7.0,<=25.5.0
     - cryptography >=37.0.0
     - cssselect >=0.9.1
     - defusedxml >=0.7.1
@@ -40,6 +40,9 @@ requirements:
     - w3lib >=1.17.0
     - zope.interface >=5.1.0
     - pydispatcher >=2.0.5
+    - service-identity >=18.1.0
+    - pypydispatcher >=2.1.0
+    - zope-interface >=5.1.0
 
 test:
   source_files:
@@ -56,7 +59,7 @@ test:
     - pytest-xdist
     - sybil >=1.3.0  # https://github.com/cjw296/sybil/issues/20#issuecomment-605433422
     - testfixtures
-    - uvloop # [not win]
+    - uvloop  # [not win]
     - ipython
     - pexpect  # [win]
   commands:
