@@ -42,6 +42,19 @@ requirements:
     - pydispatcher >=2.0.5  # [python_impl == 'cpython']
     - pydispatcher >=2.1.0  # [python_impl == 'pypy']
 
+# E   ModuleNotFoundError: No module named 'pyftpdlib'
+{% set ignore_tests = " --ignore=tests/test_feedexport_storages.py" %}
+# Unstable tests: OSError: [Errno 98] Address already in use
+{% set deselect_tests = " --deselect=tests/test_command_parse.py::TestParseCommand::test_no_reactor" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_datauri" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_engine_loop.py::TestMain::test_close_during_start_iteration" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_command_fetch.py::TestFetchCommand::test_no_reactor" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_datauri" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_command_shell.py::TestShellCommand::test_shell_fetch_no_reactor" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_commands.py::TestBenchCommand::test_run" %}
+
 test:
   source_files:
     - conftest.py
@@ -66,6 +79,7 @@ test:
     - uvloop # [not win]
     - boto3
     - botocore
+    - httpx
   commands:
     - pip check
     - scrapy version -v
@@ -76,7 +90,7 @@ test:
     # Ignore tests requiring pyftpdlib
     # skip minor failures: test_shutdown_graceful, test_convert_image and test_start_deprecated_super
     # skip py314: the tests need to be updated upstream to support py314. reactor_installer in pytest-twisted does not create an asyncio event loop.
-    - pytest -n auto  --reactor=asyncio -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)" # [py<314]
+    - pytest -n auto --reactor=asyncio {{ deselect_tests }} {{ ignore_tests }} -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)" # [py<314]
 
 about:
   home: https://www.scrapy.org
