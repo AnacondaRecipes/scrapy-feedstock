@@ -1,20 +1,20 @@
 {% set name = "scrapy" %}
-{% set version = "2.14.1" %}
+{% set version = "2.16.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: b2a4e61802e0a5518bc8293058adedbb6b0d51c08c125d1322b1af7c7cbca4c1
+  sha256: 7287952a81fa302797ec0c3370a0096a8d81d4f9fe25a608a76df2a164511714
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   entry_points:
     - scrapy = scrapy.cmdline:execute
-  skip: True  # [py<310]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -23,25 +23,37 @@ requirements:
     - hatchling >=1.27.0
   run:
     - python
-    # Twisted pinned until Scrapy is updated for its internal TLS API changes
-    - twisted >=21.7.0,<=25.5.0
+    - twisted >=21.7.0
     - cryptography >=37.0.0
     - cssselect >=0.9.1
     - defusedxml >=0.7.1
     - itemadapter >=0.1.0
     - itemloaders >=1.0.1
-    - lxml >=4.6.0
+    - lxml >=4.6.4
     - packaging
     - parsel >=1.5.0
     - protego >=0.1.15
     - pyopenssl >=22.0.0
     - queuelib >=1.4.2
-    - service_identity >=18.1.0
+    - service_identity >=23.1.0
     - tldextract
     - w3lib >=1.17.0
     - zope.interface >=5.1.0
     - pydispatcher >=2.0.5  # [python_impl == 'cpython']
     - pydispatcher >=2.1.0  # [python_impl == 'pypy']
+
+# E   ModuleNotFoundError: No module named 'pyftpdlib'
+{% set ignore_tests = " --ignore=tests/test_feedexport_storages.py" %}
+# Unstable tests: OSError: [Errno 98] Address already in use
+{% set deselect_tests = " --deselect=tests/test_command_parse.py::TestParseCommand::test_no_reactor" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_datauri" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_engine_loop.py::TestMain::test_close_during_start_iteration" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_command_fetch.py::TestFetchCommand::test_no_reactor" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_datauri" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_command_shell.py::TestShellCommand::test_shell_fetch_no_reactor" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_commands.py::TestBenchCommand::test_run" %}
 
 test:
   source_files:
@@ -67,6 +79,7 @@ test:
     - uvloop # [not win]
     - boto3
     - botocore
+    - httpx
   commands:
     - pip check
     - scrapy version -v
@@ -77,7 +90,7 @@ test:
     # Ignore tests requiring pyftpdlib
     # skip minor failures: test_shutdown_graceful, test_convert_image and test_start_deprecated_super
     # skip py314: the tests need to be updated upstream to support py314. reactor_installer in pytest-twisted does not create an asyncio event loop.
-    - pytest -n auto  --reactor=asyncio -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)" # [py<314]
+    - pytest -n auto --reactor=asyncio {{ deselect_tests }} {{ ignore_tests }} -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)" # [py<314]
 
 about:
   home: https://www.scrapy.org
