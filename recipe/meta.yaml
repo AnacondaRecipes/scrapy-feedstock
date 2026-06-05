@@ -1,20 +1,20 @@
 {% set name = "scrapy" %}
-{% set version = "2.14.1" %}
+{% set version = "2.16.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: b2a4e61802e0a5518bc8293058adedbb6b0d51c08c125d1322b1af7c7cbca4c1
+  sha256: 7287952a81fa302797ec0c3370a0096a8d81d4f9fe25a608a76df2a164511714
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   entry_points:
     - scrapy = scrapy.cmdline:execute
-  skip: True  # [py<310]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -23,20 +23,19 @@ requirements:
     - hatchling >=1.27.0
   run:
     - python
-    # Twisted pinned until Scrapy is updated for its internal TLS API changes
-    - twisted >=21.7.0,<=25.5.0
+    - twisted >=21.7.0
     - cryptography >=37.0.0
     - cssselect >=0.9.1
     - defusedxml >=0.7.1
     - itemadapter >=0.1.0
     - itemloaders >=1.0.1
-    - lxml >=4.6.0
+    - lxml >=4.6.4
     - packaging
     - parsel >=1.5.0
     - protego >=0.1.15
     - pyopenssl >=22.0.0
     - queuelib >=1.4.2
-    - service_identity >=18.1.0
+    - service_identity >=23.1.0
     - tldextract
     - w3lib >=1.17.0
     - zope.interface >=5.1.0
