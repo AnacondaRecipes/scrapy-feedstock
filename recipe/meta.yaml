@@ -62,8 +62,9 @@ test:
     - pillow
     - brotli >= 1.2
     - google-cloud-storage
-    # httpx omitted: optional HttpxDownloadHandler; its HTTPS suite fails against the
-    # Twisted mockserver on pkgs/main (ConnectError/ConnectionLost).
+    # Needed for reactorless CLI/subprocess paths (HttpxDownloadHandler).
+    # Ignore tests/test_downloader_handler_httpx.py: HTTPS suite fails on pkgs/main.
+    - httpx
     - ipython
     - uvloop # [not win]
     - boto3
