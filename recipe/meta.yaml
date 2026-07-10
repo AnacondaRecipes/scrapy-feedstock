@@ -63,6 +63,7 @@ test:
     - pillow
     - brotli >= 1.2
     - google-cloud-storage
+    - httpx
     - ipython
     - uvloop # [not win]
     - boto3
