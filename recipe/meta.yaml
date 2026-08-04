@@ -1,13 +1,25 @@
 {% set name = "scrapy" %}
-{% set version = "2.16.0" %}
+{% set version = "2.17.0" %}
+{% set ignore_tests = " --ignore=tests/test_feedexport_storages.py" %}
+{% set deselect_tests = " --deselect=tests/test_command_parse.py::TestParseCommand::test_no_reactor" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_simple"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_datauri"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_engine_loop.py::TestMain::test_close_during_start_iteration"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_command_fetch.py::TestFetchCommand::test_no_reactor"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_simple"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_datauri"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_command_shell.py::TestShellCommand::test_shell_fetch_no_reactor"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_commands.py::TestBenchCommand::test_run"' %}
 
+# E   ModuleNotFoundError: No module named 'pyftpdlib'
+# Unstable tests: OSError: [Errno 98] Address already in use
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 7287952a81fa302797ec0c3370a0096a8d81d4f9fe25a608a76df2a164511714
+  sha256: b536d14166b05e2183b19ae105a7af849cd14d4c1f70d3009d9b1828c0ab3d92
 
 build:
   number: 0
@@ -41,19 +53,7 @@ requirements:
     - zope.interface >=5.1.0
     - pydispatcher >=2.0.5  # [python_impl == 'cpython']
     - pydispatcher >=2.1.0  # [python_impl == 'pypy']
-
-# E   ModuleNotFoundError: No module named 'pyftpdlib'
-{% set ignore_tests = " --ignore=tests/test_feedexport_storages.py" %}
-# Unstable tests: OSError: [Errno 98] Address already in use
-{% set deselect_tests = " --deselect=tests/test_command_parse.py::TestParseCommand::test_no_reactor" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_simple" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_datauri" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_engine_loop.py::TestMain::test_close_during_start_iteration" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_command_fetch.py::TestFetchCommand::test_no_reactor" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_simple" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_datauri" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_command_shell.py::TestShellCommand::test_shell_fetch_no_reactor" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_commands.py::TestBenchCommand::test_run" %}
+    - pypydispatcher >=2.1.0
 
 test:
   source_files:
@@ -76,7 +76,7 @@ test:
     - brotli >= 1.2
     - google-cloud-storage
     - ipython
-    - uvloop # [not win]
+    - uvloop  # [not win]
     - boto3
     - botocore
     - httpx
@@ -90,7 +90,7 @@ test:
     # Ignore tests requiring pyftpdlib
     # skip minor failures: test_shutdown_graceful, test_convert_image and test_start_deprecated_super
     # skip py314: the tests need to be updated upstream to support py314. reactor_installer in pytest-twisted does not create an asyncio event loop.
-    - pytest -n auto --reactor=asyncio {{ deselect_tests }} {{ ignore_tests }} -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)" # [py<314]
+    - pytest -n auto --reactor=asyncio {{ deselect_tests }} {{ ignore_tests }} -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)"  # [py<314]
 
 about:
   home: https://www.scrapy.org
