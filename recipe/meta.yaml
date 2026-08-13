@@ -46,15 +46,9 @@ requirements:
 # Unstable tests: OSError: [Errno 98] Address already in use
 {% set ignore_tests = " --ignore=tests/test_feedexport_storages.py" %}
 {% set ignore_tests = ignore_tests + " --ignore=tests/test_pipeline_files.py" %}
-{% set deselect_tests = " --deselect=tests/test_command_parse.py::TestParseCommand::test_no_reactor" %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_simple"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerRunnerSubprocess::test_reactorless_datauri"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_engine_loop.py::TestMain::test_close_during_start_iteration"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_command_fetch.py::TestFetchCommand::test_no_reactor"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_simple"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_crawler_subprocess.py::TestAsyncCrawlerProcessSubprocess::test_reactorless_datauri"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_command_shell.py::TestShellCommand::test_shell_fetch_no_reactor"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_commands.py::TestBenchCommand::test_run"' %}
+# >       assert total_seconds >= close_on
+# E       assert 0.0929999999998472 >= 0.1
+{% set deselect_tests = " --deselect=tests/test_closespider.py::TestCloseSpider::test_closespider_timeout" %}
 
 test:
   source_files:
@@ -79,7 +73,7 @@ test:
     - ipython
     - uvloop  # [not win]
     - boto3
-    - botocore ==1.43.24
+    - botocore
     - httpx
   commands:
     - pip check
@@ -88,12 +82,7 @@ test:
     - scrapy --help
     - scrapy genspider -t basic brewspider anaconda.com
     - set "PYTHONIOENCODING=utf8"  # [win]
-    # Ignore tests requiring pyftpdlib
-    # skip minor failures: test_shutdown_graceful, test_convert_image and test_start_deprecated_super
-    # skip py314: the tests need to be updated upstream to support py314. reactor_installer in pytest-twisted does not create an asyncio event loop.
-    # - pytest -n auto --reactor=asyncio {{ deselect_tests }} {{ ignore_tests }} -m "not requires_reactor" -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)"  # [py<314]
-    # - pytest -n auto --reactor=asyncio {{ deselect_tests }} {{ ignore_tests }} -m "not requires_reactor" --ignore=tests/test_feedexport.py --ignore=tests/test_pipeline_files.py -k "not (test_shutdown_graceful or test_convert_image or test_start_deprecated_super)" # [py<314]
-    - pytest -n auto --reactor=asyncio -vv tests {{ ignore_tests }}
+    - pytest -n auto --reactor=asyncio -vv tests {{ ignore_tests }} {{ deselect_tests }}
 
 about:
   home: https://www.scrapy.org
