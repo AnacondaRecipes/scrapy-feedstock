@@ -94,6 +94,9 @@ test:
     - scrapy --help
     - scrapy genspider -t basic brewspider anaconda.com
     - set "PYTHONIOENCODING=utf8"  # [win]
+    # PBP exports an empty REQUESTS_CA_BUNDLE, which botocore >=1.43.54 rejects when creating boto3 clients
+    - unset REQUESTS_CA_BUNDLE      # [unix]
+    - set "REQUESTS_CA_BUNDLE="     # [win]
     - pytest -n auto --reactor=asyncio -vv tests {{ ignore_tests }} {{ deselect_tests }}
 
 about:
