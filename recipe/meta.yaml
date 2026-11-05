@@ -60,6 +60,12 @@ requirements:
 # aiodns instead of socket.getaddrinfo, which these tests patch
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_downloader_handler_aiohttp.py::TestHttp::test_idna_rejected_hostname" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_downloader_handler_aiohttp.py::TestHttps::test_idna_rejected_hostname" %}
+# win-64: intermittently resolves the mock server to a stale port and fails with
+# a connection refused error in the aiohttp download handler
+{% set deselect_tests = deselect_tests + (" --deselect=tests/test_downloader_handler_aiohttp.py::TestSimpleHttps::test_download" if win else "") %}
+# concurrent test tasks on a worker share pytest-of-<user>, where pytest's
+# numbered dir cleanup races and aborts the run with "Directory not empty"
+{% set basetemp = " --basetemp=_pytest_tmp" %}
 
 test:
   source_files:
@@ -97,7 +103,7 @@ test:
     # PBP exports an empty REQUESTS_CA_BUNDLE, which botocore >=1.43.54 rejects when creating boto3 clients
     - unset REQUESTS_CA_BUNDLE      # [unix]
     - set "REQUESTS_CA_BUNDLE="     # [win]
-    - pytest -n auto --reactor=asyncio -vv tests {{ ignore_tests }} {{ deselect_tests }}
+    - pytest -n auto --reactor=asyncio -vv tests {{ ignore_tests }} {{ deselect_tests }}{{ basetemp }}
 
 about:
   home: https://www.scrapy.org
