@@ -92,7 +92,7 @@ test:
     - uvloop  # [not win]
     - boto3
     - botocore
-    - httpx
+    - httpx2
   commands:
     - pip check
     - scrapy version -v
